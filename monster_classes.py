@@ -1,45 +1,49 @@
+import random
+
+
 class Monster:
     name = 'name'
-    hp = 0
+    max_hp = 0
+    current_hp = max_hp
     damage = 0
 
-    def
+    def monster_damage(self, list_of_hero):
+        random_index = random.randrange(len(list_of_hero))
+        hero = list_of_hero[random_index]
+        print(f'Герою {hero.name} нанесено {self.damage} урона')
+        hero.current_hp = hero.current_hp - self.damage
+
 
 class Rat(Monster):
     name = 'rat'
-    hp = 10
+    max_hp = 10
+    current_hp = max_hp
     damage = 3
 
 
 class Goblin(Monster):
     name = 'goblin'
-    hp = 18
+    max_hp = 18
+    current_hp = max_hp
     damage = 7
 
 
 class Dragon(Monster):
     name = 'dragon'
-    hp = 50
+    max_hp = 50
+    current_hp = max_hp
     damage = 15
 
 
 class BigGoblin(Monster):
     name = 'big_goblin'
-    hp = 25
+    max_hp = 25
+    current_hp = max_hp
     damage = 10
 
 
 class DragonsBaby(Monster):
     name = 'dragons_baby'
-    hp = 37
+    max_hp = 37
+    current_hp = max_hp
     damage = 8
-
-
-
-rat = Rat()
-goblin = Goblin()
-dragon = Dragon()
-big_goblin = BigGoblin()
-dragons_baby = DragonsBaby()
-
-list_of_monsters = [rat, goblin, dragon, big_goblin, dragons_baby]
