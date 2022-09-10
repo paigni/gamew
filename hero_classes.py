@@ -11,9 +11,10 @@ class Hero:
     min_damage = 0
     max_damage = 0
 
-    def hero_damage(self):
-        damage = random.randint(self.min_damage, self.max_damage)
-        return damage
+    def hero_damage(self, monst):
+        monst.current_hp -= self.damage
+        return monst.current_hp
+
 
 
 class Mage(Hero):
@@ -26,10 +27,11 @@ class Mage(Hero):
     min_damage = 10
     max_damage = 25
 
-    def fire_ball(self):
-        damage = Hero.hero_damage(self)
+    def fire_ball(self,monst):
+        damage = random.randint(10, 25)
         self.current_mana -= 10
-        return damage
+        monst.current_hp -= damage
+        return monst.current_hp
 
 
 class Paladin(Hero):
@@ -39,14 +41,12 @@ class Paladin(Hero):
     max_mana = 30
     current_mana = max_mana
     damage = 12
-    min_damage = 8
-    max_damage = 12
 
     def holy_land(self, list_of_monst):
         self.current_mana -= 8
         for monster in list_of_monst:
-            damage = Hero.hero_damage(self)
-            monster_hp = monster.hp - damage
+            damage = random.randint(8, 12)
+            monster_hp = monster.current_hp - damage
         return list_of_monst
 
 
@@ -59,6 +59,7 @@ class Priest(Hero):
     damage = 5
 
     def healing_light(self, list_of_hero):
+        self.current_mana -= 8
         for hero in list_of_hero:
             hero.current_hp += 20
             print(hero.current_hp)
