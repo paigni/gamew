@@ -8,10 +8,11 @@ class Monster:
     damage = 0
 
     def monster_damage(self, list_of_hero):
-        random_index = random.randrange(len(list_of_hero))
+        len_list = len(list_of_hero)
+        random_index = random.randrange(len_list)
         hero = list_of_hero[random_index]
         print(f'Герою {hero.name} нанесено {self.damage} урона')
-        hero.current_hp = hero.current_hp - self.damage
+        hero.current_hp -= self.damage
 
 
 class Rat(Monster):
