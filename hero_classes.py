@@ -1,4 +1,5 @@
 import random
+from monster_classes import Monster
 
 
 class Hero:
@@ -16,7 +17,6 @@ class Hero:
         return monst.current_hp
 
 
-
 class Mage(Hero):
     name = 'Mage'
     max_hp = 45
@@ -27,11 +27,23 @@ class Mage(Hero):
     min_damage = 10
     max_damage = 25
 
-    def fire_ball(self,monst):
-        damage = random.randint(10, 25)
+    def fire_ball(self, monster: Monster):
+        """
+        Метод наносит случайный урон выбранному монстру и отнимает 10 маны
+
+        Args:
+            monster: Выбранный монстр
+        """
+        damage = random.randint(self.min_damage, self.max_damage)
         self.current_mana -= 10
-        monst.current_hp -= damage
-        return monst.current_hp
+        monster.current_hp -= damage
+
+    def ability(self):
+        """
+        Метод печатает способность героя
+        """
+        print(f"{self.name} имеет способность огненный шар,которая бьёт \n"
+              "по одному из монстров и наносит случайный урон от 10 до 25.")
 
 
 class Paladin(Hero):
@@ -41,13 +53,27 @@ class Paladin(Hero):
     max_mana = 30
     current_mana = max_mana
     damage = 12
+    min_damage = 8
+    max_damage = 12
 
-    def holy_land(self, list_of_monst):
+    def holy_land(self, list_of_monster: list):
+        """
+        Метод наносит случайный урон всем монстрам и отнимает у героя 8 маны
+
+        Args:
+            list_of_monster: Список монстров
+        """
         self.current_mana -= 8
-        for monster in list_of_monst:
-            damage = random.randint(8, 12)
-            monster_hp = monster.current_hp - damage
-        return list_of_monst
+        for monster in list_of_monster:
+            damage = random.randint(self.min_damage, self.max_damage)
+            monster.current_hp -= damage
+
+    def ability(self):
+        """
+        Метод печатает способность героя
+        """
+        print(f"{self.name} имеет способность СВЯТАЯ ЗЕМЛЯ,которая бьёт \n"
+              "по всем монстрам и наносит случайный урон от 8 до 12 и забирает 8 маны.")
 
 
 class Priest(Hero):
@@ -58,8 +84,20 @@ class Priest(Hero):
     current_mana = max_mana
     damage = 5
 
-    def healing_light(self, list_of_hero):
-        self.current_mana -= 8
+    def healing_light(self, list_of_hero: list):
+        """
+        Метод исцеляет всех героев на 20 единиц и забирает 10 маны
+
+        Args:
+            list_of_hero: Список героев
+        """
+        self.current_mana -= 10
         for hero in list_of_hero:
             hero.current_hp += 20
-            print(hero.current_hp)
+
+    def ability(self):
+        """
+        Метод печатает способность героя
+        """
+        print(f"{self.name} имеет способность ИСЦЕЛЯЮЩИЙ СВЕТ,которая лечит \n"  # переместить в классы героев
+              "всех героев на 20 и забирает 10 маны.")
