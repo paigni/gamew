@@ -8,6 +8,12 @@ class Monster:
     damage = 0
 
     def monster_damage(self, list_of_hero):
+        """
+        Метод выбирает случайного героя и наносит ему урон, выводя его на экран
+
+        Args:
+            list_of_hero: Список героев
+        """
         len_list = len(list_of_hero)
         random_index = random.randrange(len_list)
         hero = list_of_hero[random_index]
