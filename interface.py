@@ -1,8 +1,24 @@
-from check import check_start_choice, check_monster_choice, check_list_of_hero,check_monster_hp
-from service import list_of_heroes, amount_monsters, list_of_monsters
+import sys
+import time
+
+from check import check_start_choice,\
+    check_actions_choice,\
+    check_monster_hp,\
+    check_hero_hp
+
+from service import defeated_monster
+
+from hero_classes import Hero
 
 
 def start_game():
+    """
+    Функция начала игры
+
+    Returns:
+        Ввод пользователя
+    """
+
     print(f'Добро пожаловать в игру, чтобы начать нажмите 1\n'
           f'для того чтобы выйти нажмите 2')
     user_input = 4
@@ -14,118 +30,99 @@ def start_game():
             print('Неверный ввод,пожалуйста введите значение 1 или 2')
 
 
-def show_hero(cop_list):
-    """cop_list добавлен, для того чтобы блокировать героев"""
-    for hero in cop_list:
-        print(
-            f'{hero.name} имеет {hero.current_hp} хп, и {hero.current_mana} маны\n'
-            f'может нанести {hero.damage} от руки'
-            f'\n'
-        )
+def show_hero(hero_list: list):
+    """
+    Функция проверяет живы ли все герои, если да, то печатает их статы
+    Далее печатается выбор героев
+
+    Args:
+        hero_list: список героев
+
+    Returns:
+        Выбранного героя
+    """
+    for hero in hero_list:
+        time.sleep(0.1)
+        if check_hero_hp(hero):
+            sys.exit(f"Герой {hero.name} побеждён,попробуйте снова")
+        else:
+            print(
+                f'{hero.name} имеет {hero.current_hp} хп, и {hero.current_mana} маны\n'
+                f'может нанести {hero.damage} от руки\n\n'
+            )
 
     count = 0
-    for hero in cop_list:
+    for hero in hero_list:
+        time.sleep(0.1)
         count += 1
         print(f'Выберите кем играть: {hero.name}- {count}\n')
     user_input = 6
-    while not check_monster_choice(user_input, len(cop_list)):
+    while not check_actions_choice(user_input, len(hero_list)):
         user_input = int(input())
-        return cop_list[user_input-1]
+    return hero_list[user_input - 1]
 
 
-def show_monster(monster_list):
+def show_monster(monster_list: list, hero_list: list):
+    """
+    Функция проверяет живы ли все монстры, если да, то они печатаются
+    Далее печатается выбор монстра для атаки
+
+    Args:
+        monster_list: список монстров
+        hero_list: список героев
+
+    Returns:
+        Выбранного монстра
+    """
     for monster in monster_list:
+        time.sleep(0.1)
         if check_monster_hp(monster):
             print(
                 f'{monster.name} имеет {monster.current_hp} хп\n'
-                f'И может нанести {monster.damage} от руки'
-                f'\n'
+                f'И может нанести {monster.damage} от руки\n\n'
             )
         else:
+            print(f"Побеждён {monster.name},всем герои получают 10 маны")
+            defeated_monster(hero_list)
             monster_list.remove(monster)
 
     count = 0
     for monster in monster_list:
+        time.sleep(0.1)
         count += 1
         print(f'Выберите кого атаковать: {monster.name}- {count}\n')
 
     user_input = 6
-    while not check_monster_choice(user_input, len(monster_list)):
+    while not check_actions_choice(user_input, len(monster_list)):
         user_input = int(input())
-        return monster_list[user_input - 1]
+    return monster_list[user_input - 1]
 
 
-def mage_ability():
-    print("Mage имеет способность огненный шар,которая бьёт \n"
-          "по одному из монстров и наносит случайный урон от 10 до 25.")
+def block_hero(hero: Hero):
+    """
+    Функция печатает какой герой заблокирован
 
+    Args:
+        hero: Героя
 
-def paladins_ability():
-    print("Paladin имеет способность СВЯТАЯ ЗЕМЛЯ,которая бьёт \n"
-          "по всем монстрам и наносит случайный урон от 8 до 12.")
-
-
-def priest_ability():
-    print("Priest имеет способность ИСЦЕЛЯЮЩИЙ СВЕТ,которая лечит \n"
-          "всех героев на 20.")
-
-
-def block_hero(hero_n):
-    print(f'Герой {hero_n.name} заблокирован для этого раунда')
+    """
+    print(f'Герой {hero.name} заблокирован для этого раунда')
 
 
 def damage_or_ability():
+    """
+    Функция выбора действия
+
+    Returns:
+        Ввод пользователя
+    """
+
     user_input = 4
     while not check_start_choice(user_input):
         user_input = int(input('Для того чтобы атаковать нажмите 1\n'
                                'Для того чтобы применить способность нажмите 2\n'))
         if check_start_choice(user_input):
             return user_input
-
-
-def game():
-    copy_list_heroes = list_of_heroes.copy()
-    monsters = list_of_monsters[:amount_monsters]
-    while True:
-        if not check_list_of_hero(copy_list_heroes):
-            hero = show_hero(copy_list_heroes)
-            if hero == list_of_heroes[0]:
-                mage_ability()
-                hero_choice = damage_or_ability()
-                if hero_choice == 1:
-                    hero.hero_damage(show_monster(monsters))
-                    copy_list_heroes.remove(hero)
-                elif hero_choice == 2:
-                    hero.fire_ball(show_monster(monsters))
-                    copy_list_heroes.remove(hero)
-                block_hero(hero)
-            elif hero == list_of_heroes[1]:
-                paladins_ability()
-                hero_choice = damage_or_ability()
-                hero = list_of_heroes[1]
-                if hero_choice == 1:
-                    hero.hero_damage(show_monster(monsters))
-                elif hero_choice == 2:
-                    hero.holy_land(monsters)
-                block_hero(hero)
-                copy_list_heroes.remove(hero)
-            elif hero == list_of_heroes[2]:
-                priest_ability()
-                hero_choice = damage_or_ability()
-                hero = list_of_heroes[2]
-                if hero_choice == 1:
-                    hero.hero_damage(show_monster(monsters))
-                elif hero_choice == 2:
-                    hero.healing_light(list_of_heroes)
-                block_hero(hero)
-                copy_list_heroes.remove(hero)
-                continue
         else:
-            for monster in monsters:
-                monster.monster_damage(list_of_heroes)
-            copy_list_heroes = list_of_heroes.copy()
-
-
-
-
-game()
+            print("Неверный ввод,повторите попытку")
+            
