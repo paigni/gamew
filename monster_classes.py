@@ -7,7 +7,7 @@ class Monster:
     current_hp = max_hp
     damage = 0
 
-    def monster_damage(self, list_of_hero):
+    def monster_damage(self, list_of_hero: list):
         """
         Метод выбирает случайного героя и наносит ему урон, выводя его на экран
 
