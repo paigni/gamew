@@ -12,9 +12,14 @@ class Hero:
     min_damage = 0
     max_damage = 0
 
-    def hero_damage(self, monst):
-        monst.current_hp -= self.damage
-        return monst.current_hp
+    def hero_damage(self, monster):
+        """
+        Метод наносит урон выбранному монстру
+
+        Args:
+            monster: Выбранный монстр
+        """
+        monster.current_hp -= self.damage
 
 
 class Mage(Hero):
@@ -67,6 +72,8 @@ class Paladin(Hero):
         for monster in list_of_monster:
             damage = random.randint(self.min_damage, self.max_damage)
             monster.current_hp -= damage
+        return list_of_monster
+
 
     def ability(self):
         """
