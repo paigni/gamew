@@ -1,14 +1,10 @@
 import sys
 import time
 
-from check import check_start_choice,\
-    check_actions_choice,\
-    check_monster_hp,\
-    check_hero_hp
-
-from service import defeated_monster
-
-from hero_classes import Hero
+from check import check_start_choice, \
+    check_hero_hp, \
+    check_user_input,\
+    check_actions_choice
 
 
 def start_game():
@@ -21,10 +17,10 @@ def start_game():
 
     print(f'Добро пожаловать в игру, чтобы начать нажмите 1\n'
           f'для того чтобы выйти нажмите 2')
-    user_input = 4
-    while not check_start_choice(user_input):
+    user_input = 'd'
+    while not check_user_input(user_input):
         user_input = int(input())
-        if user_input:
+        if check_start_choice(user_input):
             return user_input
         else:
             print('Неверный ввод,пожалуйста введите значение 1 или 2')
@@ -32,14 +28,11 @@ def start_game():
 
 def show_hero(hero_list: list):
     """
-    Функция проверяет живы ли все герои, если да, то печатает их статы
+    Функция печатает статы героев
     Далее печатается выбор героев
 
     Args:
         hero_list: список героев
-
-    Returns:
-        Выбранного героя
     """
     for hero in hero_list:
         time.sleep(0.1)
@@ -51,62 +44,72 @@ def show_hero(hero_list: list):
                 f'может нанести {hero.damage} от руки\n\n'
             )
 
+
+def show_monster(monster_list):
+    """
+    Функция проверяет живы ли все монстры, если да, то они печатаются
+    Далее печатается выбор монстра для атаки
+    """
+    for monster in monster_list:
+        time.sleep(0.1)
+        print(
+            f'{monster.name} имеет {monster.current_hp} хп\n'
+            f'И может нанести {monster.damage} от руки\n\n'
+        )
+
+
+def choice_hero(hero_list):
+    """
+    Функция печатает не заблокированных героев, предлагая выбрать одного из
+
+    Args:
+        hero_list: список героев
+    Returns:
+        ввод пользователя
+    """
     count = 0
     for hero in hero_list:
         time.sleep(0.1)
         count += 1
         print(f'Выберите кем играть: {hero.name}- {count}\n')
-    user_input = 6
-    while not check_actions_choice(user_input, len(hero_list)):
-        user_input = int(input())
+    user_input = 'd'
+    while not check_user_input(user_input):
+        user_input = input()
+        if check_user_input(user_input):
+            user_input = int(user_input)
+            if check_actions_choice(user_input, len(hero_list)):
+                break
+        else:
+            print("Неверный ввод,попробуйте снова")
     return hero_list[user_input - 1]
 
 
-def show_monster(monster_list: list, hero_list: list):
+
+def choice_monster(monster_list):
     """
-    Функция проверяет живы ли все монстры, если да, то они печатаются
-    Далее печатается выбор монстра для атаки
+    Функция печатает живых монстров, предлагая выбрать одного из
 
     Args:
-        monster_list: список монстров
-        hero_list: список героев
-
+        monster_list: список героев
     Returns:
-        Выбранного монстра
+        ввод пользователя
     """
-    for monster in monster_list:
-        time.sleep(0.1)
-        if check_monster_hp(monster):
-            print(
-                f'{monster.name} имеет {monster.current_hp} хп\n'
-                f'И может нанести {monster.damage} от руки\n\n'
-            )
-        else:
-            print(f"Побеждён {monster.name},всем герои получают 10 маны")
-            defeated_monster(hero_list)
-            monster_list.remove(monster)
-
     count = 0
     for monster in monster_list:
         time.sleep(0.1)
         count += 1
         print(f'Выберите кого атаковать: {monster.name}- {count}\n')
 
-    user_input = 6
-    while not check_actions_choice(user_input, len(monster_list)):
-        user_input = int(input())
+    user_input = 'd'
+    while not check_user_input(user_input):
+        user_input = input()
+        if check_user_input(user_input):
+            user_input = int(user_input)
+            if check_actions_choice(user_input, len(monster_list)):
+                break
+        else:
+            print("Неверный ввод,попробуйте снова")
     return monster_list[user_input - 1]
-
-
-def block_hero(hero: Hero):
-    """
-    Функция печатает какой герой заблокирован
-
-    Args:
-        hero: Героя
-
-    """
-    print(f'Герой {hero.name} заблокирован для этого раунда')
 
 
 def damage_or_ability():
@@ -117,12 +120,13 @@ def damage_or_ability():
         Ввод пользователя
     """
 
-    user_input = 4
-    while not check_start_choice(user_input):
-        user_input = int(input('Для того чтобы атаковать нажмите 1\n'
-                               'Для того чтобы применить способность нажмите 2\n'))
-        if check_start_choice(user_input):
-            return user_input
+    user_input = 'd'
+    while not check_user_input(user_input):
+        user_input = input('Для того чтобы атаковать нажмите 1\n'
+                           'Для того чтобы применить способность нажмите 2\n')
+        if check_user_input(user_input):
+            user_input = int(user_input)
+            if check_start_choice(user_input):
+                return user_input
         else:
             print("Неверный ввод,повторите попытку")
-            
