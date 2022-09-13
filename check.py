@@ -63,7 +63,7 @@ def check_monster_hp(monster: Monster) -> bool:
     Returns:
         Статус проверки
     """
-    if monster.current_hp > 0:
+    if monster.current_hp >= 0:
         return True
     return False
 
@@ -90,5 +90,31 @@ def check_hero_hp(hero) -> bool:
         Статус проверки
     """
     if hero.current_hp <= 0:
+        return True
+    return False
+
+
+def check_list_of_monsters(monster_list: list) -> bool:
+    """
+    Проверка пустоты списка
+    Args:
+        monster_list: список монстров
+    Returns:
+        Статус проверки
+    """
+    if monster_list == []:
+        return True
+    return False
+
+
+def check_user_input(inp: str) -> bool:
+    """
+    Проверка корректности ввода числа
+    Args:
+        inp: ввод пользователя
+    Returns:
+        Статус проверки
+    """
+    if inp.isdigit():
         return True
     return False
